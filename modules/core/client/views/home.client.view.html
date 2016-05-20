@@ -1,0 +1,46 @@
+<section ng-controller="HomeController">
+  <div class="jumbotron text-center">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-12">
+        <h1><span class="text-muted">you</span>.mcpe.me</h1>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <p class="lead">
+        Yo! Get yer FREE hostnames here!
+      </p>
+    </div>
+    <div class="row">
+      <p>
+        <a class="btn btn-primary btn-lg" ui-sref="records.create()">Get started</a>
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <accordion>
+      <accordion-group heading="Where is the old mcpe.me?">
+        The old version of mcpe.me has been decommissioned and replaced with this website.
+      </accordion-group>
+      <accordion-group heading="How do I create a record?">
+        You will need to create an account and sign in. Then you can click "Records" and "Create records" in the menu bar. Enter your details and your record will be created instantly.
+      </accordion-group>
+      <accordion-group heading="What is happening to the records I created on the old website?" panel-class="panel-danger">
+        On [date], all old records were removed from our DNS provider. We have dumped record data publicly. Now any user can register any name they like. However, until [date], all old record holders can claim records which they used to own and have been taken by another user by messaging @falkirknh on Twitter. <b>When assessing claims for old records, the old service policy will be used.</b>
+      </accordion-group>
+      <accordion-group heading="What is verification? How can I verify my server?" panel-class="panel-success">
+        Verification is a process which ensures that the record owner is also the server owner. Only MCPE servers can be verified. You may be requested to verify your server by our staff for security reasons. <br><br>
+        You can verify a server by setting the title of the server to the "Record ID" and restarting the server. mcpe.me will verify you server a few seconds after you add the server. If your server is confirmed to be an MCPE server (but doesn't have the verification code set), mcpe.me will try again in 20 minutes. You can force mcpe.me to re-verify by submitting the edit form without any changes. Verification is <b>not</b> instant, it will take about 15 second for mcpe.me to complete a verification.
+      </accordion-group>
+      <accordion-group heading="What are all these tokens and keys?">
+        The new service generates and uses an array of tokens and key to operate.
+        <ul>
+          <li>User ID - this is a unique identifier for a user that can't be changed. It is useful for reporting users.</li>
+          <li>Record ID - this is a unique identifier for a record that can't be changed. It is useful for requesting support with records.</li>
+          <li>CF ID - each record is assigned an ID by CloudFlare. This ID may change over the course of the record's life and is only used internally.</li>
+          <li>Record API key - each record has a key generated for performing remote updates on it. This key is not yet used.</li>
+        </ul>
+      </accordion-group>
+    </accordion>
+  </div>
+</section>

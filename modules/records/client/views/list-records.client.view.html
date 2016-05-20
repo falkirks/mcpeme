@@ -1,0 +1,31 @@
+<section ng-controller="RecordsController" ng-init="find()">
+  <div class="page-header">
+    <div class="row">
+      <div class="col-md-4">
+        <h1>Records</h1>
+      </div>
+      <div class="col-md-4" style="margin-top: 2em">
+        <input class="form-control col-md-4" type="text" ng-model="search" placeholder="Search" ng-change="figureOutItemsToDisplay()" />
+      </div>
+    </div>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="record in pagedItems" ui-sref="records.view({recordId: record._id})" class="list-group-item" ng-class="record.serverType === 'VERIMCPE' ? 'list-group-item-success' : ''">
+      <small class="list-group-item-text">
+        Created on
+        <span ng-bind="record.created | date:'mediumDate'"></span>
+        by
+        <span ng-bind="record.user.displayName"></span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="record.name"></h4>
+      <p class="list-group-item-text" ng-bind="record.content"></p>
+      <span class="label label-info" ng-bind="record.recordType"></span>
+      <span class="label label-default" ng-show="record.serverType === 'NOTMCPE'">NOTMCPE</span>
+      <span class="label label-primary" ng-show="record.serverType === 'MCPE'">MCPE</span>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" ng-if="records.$resolved && !records.length">
+    No records yet, why don't you <a ui-sref="records.create">create one</a>?
+  </div>
+  <pagination boundary-links="true" max-size="8" items-per-page="itemsPerPage" total-items="filterLength" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+</section>

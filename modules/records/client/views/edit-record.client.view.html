@@ -1,0 +1,33 @@
+<section ng-controller="RecordsController" ng-init="findOne()">
+  <div class="page-header">
+    <h1>Edit Record</h1>
+  </div>
+  <div class="col-md-12">
+    <form name="recordForm" class="form-horizontal" ng-submit="update(recordForm.$valid)" novalidate>
+      <fieldset>
+        <div class="form-group">
+          <label for="recordType">Type</label>
+          <select class="form-control" ng-model="record.recordType" name="recordType" id="recordType" required>
+            <option>A</option>
+            <option>AAAA</option>
+            <option>CNAME</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="content">Content</label>
+          <input name="content" type="text" ng-model="record.content" id="content" class="form-control" placeholder="" required>
+          <div ng-messages="recordForm.content.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Record content is required.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <input type="submit" value="Update" class="btn btn-default">
+        </div>
+        <small>If you make changes to your record, your server will be automatically verified again.</small>
+        <div ng-show="error" class="text-danger">
+          <strong ng-bind="error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>

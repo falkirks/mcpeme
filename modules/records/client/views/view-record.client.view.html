@@ -1,0 +1,64 @@
+<section ng-controller="RecordsController" ng-init="findOne()">
+  <div class="page-header">
+    <h1><span class="glyphicon glyphicon-ok" style="color:green;" tooltip="This owner of this record was verified to be the server owner by mcpe.me." ng-show="record.serverType == 'VERIMCPE'"></span> <span class="label label-primary" style="font-size: 15pt;" tooltip="This server was recorded to be a valid MCPE server." ng-show="record.serverType == 'MCPE'">MCPE</span> <span class="label label-default" style="font-size: 15pt;" tooltip="This server has not been verified as an MCPE server." ng-show="record.serverType == 'NOTMCPE'">NOTMCPE</span> {{record.name}}</h1>
+
+  </div>
+  <div class="pull-right" ng-show="authentication.user._id == record.user._id || authentication.user.roles.indexOf('admin') > -1">
+    <a class="btn btn-primary" ui-sref="records.edit({recordId: record._id})">
+      <i class="glyphicon glyphicon-edit"></i>
+    </a>
+    <a class="btn btn-primary" ng-click="remove();">
+      <i class="glyphicon glyphicon-trash"></i>
+    </a>
+  </div>
+  <small>
+    <em class="text-muted">
+      Posted on
+      <span ng-bind="record.created | date:'mediumDate'"></span>
+      by
+      <span ng-bind="record.user.displayName"></span>
+    </em>
+  </small>
+  <br><br>
+  <table class="table">
+    <tbody>
+      <tr>
+        <td><b>Record Details</b></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Type</td>
+        <td>{{record.recordType}}</td>
+      </tr>
+      <tr>
+        <td>Content</td>
+        <td>{{record.content}}</td>
+      </tr>
+      <tr>
+        <td>Record ID</td>
+        <td><u tooltip="This is an immutable identifier for the record. If you want to report this record, you should include this id.">{{record._id}}</u></td>
+      </tr>
+      <tr>
+        <td><b>Owner Details</b></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Name</td>
+        <td>{{record.user.displayName}}</td>
+      </tr>
+      <tr>
+        <td>Email</td>
+        <td>{{record.user.email}}</td>
+      </tr>
+      <tr>
+        <td>Owner ID</td>
+        <td><u tooltip="This is an immutable identifier for the record owner. If you want to report the user, you should include this id.">{{record.user._id}}</u></td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-show="authentication.user._id == record.user._id">
+    <h2>API Token</h2>
+    <pre>{{record.token}}</pre>
+  </div>
+
+</section>

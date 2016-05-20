@@ -1,0 +1,39 @@
+<section ng-controller="RecordsController">
+  <div class="page-header">
+    <h1>New Record</h1>
+  </div>
+  <div class="col-md-12">
+    <form name="recordForm" class="form-horizontal" ng-submit="create(recordForm.$valid)" novalidate>
+      <fieldset>
+        <div class="form-group" show-errors>
+          <label for="name">Name</label>
+          <input name="name" type="text" ng-model="name" id="name" class="form-control" placeholder="Name" required>
+          <div ng-messages="recordForm.name.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Record name is required.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="recordType">Type</label>
+          <select class="form-control" ng-model="recordType" name="recordType" id="recordType" required>
+            <option>A</option>
+            <option>AAAA</option>
+            <option>CNAME</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="content">Content</label>
+          <input name="content" type="text" ng-model="content" id="content" class="form-control" placeholder="" required>
+          <div ng-messages="recordForm.content.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Record content is required.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <input type="submit" class="btn btn-default">
+        </div>
+        <div ng-show="error" class="text-danger">
+          <strong ng-bind="error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>
