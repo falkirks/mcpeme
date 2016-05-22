@@ -55,9 +55,9 @@
   {% for jsFile in jsFiles %}<script type="text/javascript" src="{{jsFile}}"></script>{% endfor %}
   <script>Smooch.init({
     appToken: 'drkl5wzui2p0i55khxivuina7',
-    givenName: {{user.firstName}},
-    surname: {{user.lastName}},
-    email: {{user.email}}
+    givenName: '{{user.firstName}}',
+    surname: '{{user.lastName}}',
+    email: '{{user.email}}'
   });</script>
   {% if livereload %}
   <!--Livereload script rendered -->
