@@ -5,10 +5,21 @@ angular.module('records').controller('RecordsController', ['$scope', '$filter', 
   function ($scope, $filter, $stateParams, $location, Authentication, Records) {
     $scope.authentication = Authentication;
 
-    // Create new Record
-    $scope.create = function (isValid) {
-      $scope.error = null;
+    //FIXME ROLLOUT FEATURE: remove later
+    $scope.usedNames = [
+      'lbsg'
+    ];
+    $scope.warningShown = false;
+    //
 
+    // Create new Record
+    $scope.create = function (isValid, force) {
+      $scope.error = null;
+      //FIXME ^ same
+      if(!$scope.warningShown && $scope.usedNames.indexOf(this.name) > -1){
+        $scope.warningShown = true;
+      }
+      //
       if (!isValid) {
         $scope.$broadcast('show-errors-check-validity', 'recordForm');
 

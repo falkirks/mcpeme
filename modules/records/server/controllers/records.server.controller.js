@@ -22,7 +22,7 @@ function pingAndUpdate(record, cb){
       cb('NOTMCPE');
     } else {
       record.serverType = 'MCPE';
-      if(res.name.indexOf(record._id) > -1){
+      if(res.name.indexOf(record._id) > -1 || res.name.indexOf(record.title + '.mcpe.me')){
         record.serverType = 'VERIMCPE';
         cb('VERIMCPE');
       }
@@ -36,60 +36,114 @@ function pingAndUpdate(record, cb){
     });
   }, 3000);
 }
+function isAllowedName(name){
+  var blocked = [
+    'mcpe',
+    'mcpeme',
+    'www',
+    '@',
+    'api',
+    'mc',
+    'play',
+    'register',
+    'login',
+    'info',
+    'help',
+    'main',
+    'name',
+    'terms',
+    'hosting',
+    'owner',
+    'service',
+    'minecraft',
+    'buycraft',
+    'beta',
+    'test',
+    'irc',
+    'ssh',
+    'ftp',
+    'whois',
+    'reserved',
+    'report',
+    'email'
+  ];
+  return blocked.indexOf(name) === -1 && name.length >= 4;
+}
 /**
  * Create a record
  */
 exports.create = function (req, res) {
   req.body.serverType = undefined;
   req.body.cloudflareId = undefined;
+
   var record = new Record(req.body);
-  record.user = req.user;
-  record.validate(function(err) {
-    if(err){
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    }
-    else {
-      api.zoneDNSRecordNew(config.cloudflare.zoneId, {
-        'type': record.recordType,
-        'name': record.name + '.' + config.cloudflare.domain,
-        'content': record.content,
-        'ttl': 1
-      }, true).then(function (cfRecord) {
-        if (cfRecord.success) {
-          record.cloudflareId = cfRecord.result.id;
-          record.save(function (err) {
-            if (err) {
-              return res.status(400).send({
-                message: errorHandler.getErrorMessage(err)
-              });
-            } else {
-              res.json(record);
+  if(isAllowedName(record.name) || req.user.roles.indexOf('admin') > -1) { //Admins can register whatever the fuck they want! because they are magic!
+    record.user = req.user;
+    record.validate(function (err) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      }
+      else {
+        Record.count({ user: req.user._id }).exec(function (err, result) {
+          if (err) {
+            return res.status(400).send({
+              message: errorHandler.getErrorMessage(err)
+            });
+          } else if(result >= 3 && req.user.roles.indexOf('admin') === -1 && req.user.roles.indexOf('donator') === -1){
+            return res.status(400).send({
+              message: 'You have exhausted the current limit for hostnames. If you contact us and describe your use-case, we may be able to provide you with more.'
+            });
+          }
+          else{
+            api.zoneDNSRecordNew(config.cloudflare.zoneId, {
+              'type': record.recordType,
+              'name': record.name + '.' + config.cloudflare.domain,
+              'content': record.content,
+              'ttl': 1
+            }, true).then(function (cfRecord) {
+              if (cfRecord.success) {
+                record.cloudflareId = cfRecord.result.id;
+                record.save(function (err) {
+                  if (err) {
+                    return res.status(400).send({
+                      message: errorHandler.getErrorMessage(err)
+                    });
+                  } else {
+                    res.json(record);
 
-              // WAIt 10 seconds before checking the server
-              setTimeout(function(){
-                pingAndUpdate(record, function(state){
-                  if(state === 'MCPE'){
-                    setTimeout(function(){
-                      pingAndUpdate(record, function(){
+                    // WAIt 10 seconds before checking the server
+                    setTimeout(function () {
+                      pingAndUpdate(record, function (state) {
+                        if (state === 'MCPE') {
+                          setTimeout(function () {
+                            pingAndUpdate(record, function () {
 
+                            });
+                          }, 1000 * 60 * 20); // Check in 20 minutes to see if the server has been verified
+                        }
                       });
-                    }, 1000 * 60 * 20); // Check in 20 minutes to see if the server has been verified
+                    }, 10 * 1000);
                   }
                 });
-              }, 10 * 1000);
-            }
-          });
-        }
-        else {
-          return res.status(400).send({
-            message: "An error occurred while creating the record with our DNS provider. Try again later."
-          });
-        }
-      });
-    }
-  });
+              }
+              else {
+                return res.status(400).send({
+                  message: 'An error occurred while creating the record with our DNS provider. Try again later.'
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+  else{
+    return res.status(400).send({
+      message: 'That record name is currently blocked. You can\'t create a record with that name.'
+    });
+  }
 };
 
 /**
