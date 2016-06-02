@@ -35,6 +35,12 @@ module.exports = {
       }
     }
   },
+  cloudflare: {
+    email: process.env.CLOUDFLARE_EMAIL,
+    key: process.env.CLOUDFLARE_KEY,
+    domain: process.env.CLOUDFLARE_DOMAIN,
+    zoneId: process.env.CLOUDFLARE_ZONEID
+  },
   facebook: {
     clientID: process.env.FACEBOOK_ID || 'APP_ID',
     clientSecret: process.env.FACEBOOK_SECRET || 'APP_SECRET',
@@ -45,26 +51,10 @@ module.exports = {
     clientSecret: process.env.TWITTER_SECRET || 'CONSUMER_SECRET',
     callbackURL: '/api/auth/twitter/callback'
   },
-  google: {
-    clientID: process.env.GOOGLE_ID || 'APP_ID',
-    clientSecret: process.env.GOOGLE_SECRET || 'APP_SECRET',
-    callbackURL: '/api/auth/google/callback'
-  },
-  linkedin: {
-    clientID: process.env.LINKEDIN_ID || 'APP_ID',
-    clientSecret: process.env.LINKEDIN_SECRET || 'APP_SECRET',
-    callbackURL: '/api/auth/linkedin/callback'
-  },
   github: {
     clientID: process.env.GITHUB_ID || 'APP_ID',
     clientSecret: process.env.GITHUB_SECRET || 'APP_SECRET',
     callbackURL: '/api/auth/github/callback'
-  },
-  paypal: {
-    clientID: process.env.PAYPAL_ID || 'CLIENT_ID',
-    clientSecret: process.env.PAYPAL_SECRET || 'CLIENT_SECRET',
-    callbackURL: '/api/auth/paypal/callback',
-    sandbox: false
   },
   mailer: {
     from: process.env.MAILER_FROM || 'MAILER_FROM',

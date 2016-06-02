@@ -73,6 +73,9 @@ function isAllowedName(name){
  * Create a record
  */
 exports.create = function (req, res) {
+  api.zoneGetAll().then(function(data){
+    console.log(data);
+  });
   req.body.serverType = undefined;
   req.body.cloudflareId = undefined;
 
