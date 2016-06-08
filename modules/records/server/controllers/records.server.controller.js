@@ -77,6 +77,8 @@ exports.create = function (req, res) {
   req.body.cloudflareId = undefined;
 
   var record = new Record(req.body);
+  record.name = record.name.toLowerCase(); // ALL records in lowercase
+
   if(isAllowedName(record.name) || req.user.roles.indexOf('admin') > -1 || req.user.roles.indexOf('donator') > -1) { //Admins can register whatever the fuck they want! because they are magic!
     record.user = req.user;
     record.validate(function (err) {
