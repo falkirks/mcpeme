@@ -22,7 +22,7 @@ function pingAndUpdate(record, cb){
       cb('NOTMCPE');
     } else {
       record.serverType = 'MCPE';
-      if(res.name.indexOf(record._id) > -1 || res.name.indexOf(record.title + '.mcpe.me')){
+      if(res.name.indexOf(record._id) > -1 || res.name.indexOf(record.title + '.mcpe.me') > -1){
         record.serverType = 'VERIMCPE';
         cb('VERIMCPE');
       }
