@@ -5,6 +5,10 @@
   <div class="col-md-12">
     <form name="recordForm" class="form-horizontal" ng-submit="update(recordForm.$valid)" novalidate>
       <fieldset>
+        <div class="form-group" ng-show="user.roles.indexOf('admin') > -1">
+          <label for="name">Name</label>
+          <input name="name" type="text" ng-model="record.name" id="name" class="form-control" placeholder="Name">
+        </div>
         <div class="form-group">
           <label for="recordType">Type</label>
           <select class="form-control" ng-model="record.recordType" name="recordType" id="recordType" required>

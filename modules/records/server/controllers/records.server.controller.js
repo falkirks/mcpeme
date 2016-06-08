@@ -67,20 +67,17 @@ function isAllowedName(name){
     'report',
     'email'
   ];
-  return blocked.indexOf(name) === -1 && name.length >= 4;
+  return blocked.indexOf(name) === -1 && name.length >= 4 && name.indexOf('.') === -1;
 }
 /**
  * Create a record
  */
 exports.create = function (req, res) {
-  api.zoneGetAll().then(function(data){
-    console.log(data);
-  });
   req.body.serverType = undefined;
   req.body.cloudflareId = undefined;
 
   var record = new Record(req.body);
-  if(isAllowedName(record.name) || req.user.roles.indexOf('admin') > -1) { //Admins can register whatever the fuck they want! because they are magic!
+  if(isAllowedName(record.name) || req.user.roles.indexOf('admin') > -1 || req.user.roles.indexOf('donator') > -1) { //Admins can register whatever the fuck they want! because they are magic!
     record.user = req.user;
     record.validate(function (err) {
       if (err) {
@@ -162,9 +159,11 @@ exports.read = function (req, res){
 exports.update = function (req, res) {
   var record = req.record;
 
-  //record.name = req.body.name;
   record.recordType = req.body.recordType;
   record.content = req.body.content;
+  if(req.user.roles.indexOf('admin') > -1) {
+    record.name = req.body.name;
+  }
 
   record.validate(function(err) {
     if (err) {
@@ -175,7 +174,8 @@ exports.update = function (req, res) {
     else {
       api.zoneDNSRecordUpdate(config.cloudflare.zoneId, record.cloudflareId, {
         type: record.recordType,
-        content: record.content
+        content: record.content,
+        name: record.name
       }, true).then(function (cfRecord) {
         if (cfRecord.success) {
           record.save(function (err) {
